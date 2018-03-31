@@ -1,4 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
+import java.util.ArrayList;
 import java.util.TreeMap;
 /**
  *
@@ -23,11 +25,33 @@ public class PointST<Value> {
    } // value associated with point p 
    public boolean contains(Point2D p) {
     return m.get(p) != null;   
-   }// does the symbol table contain point p? 
+   } // does the symbol table contain point p? 
    public Iterable<Point2D> points() {
        return m.keySet();
-   }// all points in the symbol table 
-//   public Iterable<Point2D> range(RectHV rect)             // all points that are inside the rectangle 
-//   public           Point2D nearest(Point2D p)             // a nearest neighbor to point p; null if the symbol table is empty 
+   } // all points in the symbol table 
+   
+   
+   public Iterable<Point2D> range(RectHV rect) {
+       ArrayList<Point2D> a = new ArrayList();
+       for(Point2D p : m.keySet()) {
+             if(rect.contains(p)) a.add(p);
+       }
+       return a;
+   } // all points that are inside the rectangle
+   
+   // returns null if symbol table is empty
+   public Point2D nearest(Point2D p) {
+       if(this.isEmpty()) return null;
+       Double shortestDistance = null;
+       Point2D tmp = null;
+       for(Point2D np : m.keySet()) {
+           Double curDistance = np.distanceTo(p);
+           if(shortestDistance == null || curDistance < shortestDistance) {
+                shortestDistance = curDistance;
+                tmp = np;
+           }
+       }
+       return tmp;
+   } // a nearest neighbor to point p; null if the symbol table is empty
 //   public static void main(String[] args)                  // unit testing of the methods (not graded) 
 }
