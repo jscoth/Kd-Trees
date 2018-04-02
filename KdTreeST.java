@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.RectHV;
+import java.util.ArrayList;
 import java.util.StringJoiner;
 /**
  *
@@ -33,13 +35,10 @@ public class KdTreeST<Value> {
        }
    }
    private Node root;
-   private int size;
-   public KdTreeST() {
-       size = 0;
-   }
+   public KdTreeST() { }
    
    public boolean isEmpty() {
-     return size == 0;
+     return size() == 0;
    } 
    
    public int size() {
