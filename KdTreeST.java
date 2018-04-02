@@ -103,6 +103,51 @@ public class KdTreeST<Value> {
         return keys;
     }
    
+    public Iterable<Point2D> range(RectHV rect) {
+        ArrayList<Point2D> a = new ArrayList<>();
+        range(root, rect, a);
+        return a;
+    }
+    
+    private void range(Node r, RectHV rect, ArrayList<Point2D> a) {
+        if(r == null) return;
+        if(rect.contains(r.key)) {
+            a.add(r.key);
+        }
+        
+        if(nodeLineIntersectsQueryRect(r, r.left, rect)) {
+            range(r.left, rect, a);  // go left
+        }
+        
+        if(nodeLineIntersectsQueryRect(r, r.right, rect)) {
+            range(r.right, rect, a); // go right
+        }
+    }
+    
+    // bound to be some bugs here.... what happens when points start landing on top of each-other's lines/plane-partitions again??
+    // this is insuffecient to draw the node line.... all previous boundaries must be considered (see worksheet)
+    private boolean nodeLineIntersectsQueryRect(Node r, Node rChild, RectHV rect) {
+        if(rChild == null) return false;
+        assert rChild.isHorizontal == !r.isHorizontal;
+        RectHV nodeLine;
+        if(rChild.isHorizontal) {
+            boolean childIsLeft = rChild.key.x() < r.key.x();
+            if(childIsLeft) {
+                nodeLine = new RectHV(Integer.MIN_VALUE, rChild.key.y(), r.key.x(), rChild.key.y());
+            } else {
+                nodeLine = new RectHV(r.key.x(), rChild.key.y(), Integer.MAX_VALUE, rChild.key.y());
+            }
+        } else {
+            boolean childIsUp = rChild.key.y() > r.key.y();
+            if(childIsUp) {
+                nodeLine = new RectHV(rChild.key.x(), r.key.y(), rChild.key.x(), Integer.MAX_VALUE);
+            } else {
+                nodeLine = new RectHV(rChild.key.x(), Integer.MIN_VALUE, rChild.key.x(), r.key.y());
+            }
+        }
+        return rect.intersects(nodeLine);
+    }
+   
    @Override 
    public String toString() {
        StringJoiner sj = new StringJoiner("}, {", "[{", "}]");
