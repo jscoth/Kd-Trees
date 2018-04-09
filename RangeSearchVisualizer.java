@@ -1,4 +1,5 @@
-package kdtree;
+package a062dTree;
+
 /******************************************************************************
  *  Compilation:  javac RangeSearchVisualizer.java
  *  Execution:    java RangeSearchVisualizer input.txt
@@ -22,7 +23,7 @@ public class RangeSearchVisualizer {
 
     public static void main(String[] args) {
 
-        String filename = "input10.txt";
+        String filename = "input10.txt"; //args[0];
         In in = new In(filename);
 
         StdDraw.show(0);
@@ -79,8 +80,22 @@ public class RangeSearchVisualizer {
             StdDraw.clear();
             StdDraw.setPenColor(StdDraw.BLACK);
             StdDraw.setPenRadius(.01);
-            for (Point2D p : brute.points())
+            int count = 0;
+            double last = 0;
+            for (Point2D p : kdtree.points())
+            {
+              	
+            	
+            	StdDraw.setPenRadius();
+            	int xMod = count % 2 - 1;
+            	int yMod = count % 2;
+            	StdDraw.line(p.x()-(xMod * last), p.y()-(yMod * last),p.x()+(xMod * last),p.y()+(yMod * last));
+            	StdDraw.setPenRadius(.01);
                 p.draw();
+                last = p.y();
+                count++;
+                
+            }
 
             // draw the rectangle
             StdDraw.setPenColor(StdDraw.BLACK);
@@ -99,7 +114,7 @@ public class RangeSearchVisualizer {
             for (Point2D p : kdtree.range(rect))
                 p.draw();
 
-            StdDraw.show(40);
+           // StdDraw.show(40);
         }
     }
 }

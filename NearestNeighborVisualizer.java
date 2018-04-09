@@ -1,4 +1,4 @@
-package kdtree;
+package a062dTree;
 
 /******************************************************************************
  *  Compilation:  javac NearestNeighborVisualizer.java
